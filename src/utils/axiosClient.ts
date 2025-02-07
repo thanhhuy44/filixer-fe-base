@@ -26,7 +26,7 @@ request.interceptors.request.use(
   },
   (error: AxiosError) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 request.interceptors.response.use(
@@ -54,7 +54,7 @@ request.interceptors.response.use(
         break;
     }
     return Promise.reject(error.response?.data || error.response);
-  }
+  },
 );
 
 export default request;
