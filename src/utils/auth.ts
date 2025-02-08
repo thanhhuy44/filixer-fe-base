@@ -5,15 +5,11 @@ import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 
 import { AuthApi } from "@/api/auth";
+import { ApiResponse } from "@/types";
 
 const refreshToken = async (token: JWT) => {
   try {
-    const response = {
-      data: {
-        token: "",
-        refreshToken: "",
-      },
-    };
+    const response = await AuthApi.refreshToken(token.user.refreshToken)
     return {
       ...token,
       accessToken: response.data?.token,
@@ -30,33 +26,32 @@ const refreshToken = async (token: JWT) => {
 
 export const authOptions: AuthOptions = {
   pages: {
-    signIn: "/",
-    error: "/",
+    signIn: "/login",
+    error: "/login",
   },
   providers: [
     Credentials({
       name: "Credentials",
       credentials: {
-        id: {
-          type: "number",
+        email: {
+          type: 'text'
         },
-        first_name: {},
-        auth_date: {
-          type: "number",
-        },
-        hash: {},
-        last_name: {},
-        photo_url: {},
-        username: {},
+        password: {
+          type: "text"
+        }
       },
       authorize: async (body) => {
-        console.log("🚀 ~ authorize: ~ body:", body);
         try {
-          const response = await AuthApi.login();
+          const response = await AuthApi.login({
+            email: body?.email ?? "",
+            password: body?.password ?? ""
+          });
+          // console.log("🚀 ~ authorize: ~ response:", response)
           return response.data;
-        } catch (error) {
+        } catch (e) {
+          const error = e as ApiResponse
           console.error(error);
-          throw new Error("Login failed!");
+          throw new Error(`${error.statusCode}_${error.message}`);
         }
       },
     }),
