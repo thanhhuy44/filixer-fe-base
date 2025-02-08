@@ -19,7 +19,7 @@ function Header() {
           {status === "loading" ? (
             <Avatar className="size-10">
               <AvatarFallback>
-                <Loader2 className="size-5" />
+                <Loader2 className="size-5 animate-spin" />
               </AvatarFallback>
             </Avatar>
           ) : status === "authenticated" ? (
