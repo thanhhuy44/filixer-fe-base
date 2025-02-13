@@ -9,7 +9,7 @@ import { ApiResponse } from "@/types";
 
 const refreshToken = async (token: JWT) => {
   try {
-    const response = await AuthApi.refreshToken(token.user.refreshToken)
+    const response = await AuthApi.refreshToken(token.user.refreshToken);
     return {
       ...token,
       accessToken: response.data?.token,
@@ -34,22 +34,22 @@ export const authOptions: AuthOptions = {
       name: "Credentials",
       credentials: {
         email: {
-          type: 'text'
+          type: "text",
         },
         password: {
-          type: "text"
-        }
+          type: "text",
+        },
       },
       authorize: async (body) => {
         try {
           const response = await AuthApi.login({
             email: body?.email ?? "",
-            password: body?.password ?? ""
+            password: body?.password ?? "",
           });
-          // console.log("🚀 ~ authorize: ~ response:", response)
+          // console.log("🚀 ~ authorize: ~ response:", response);
           return response.data;
         } catch (e) {
-          const error = e as ApiResponse
+          const error = e as ApiResponse;
           console.error(error);
           throw new Error(`${error.statusCode}_${error.message}`);
         }
